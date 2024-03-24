@@ -8,55 +8,66 @@
 import SwiftUI
 
 struct ContentView: View {
-    var emojis : Array<String> = ["👻", "🕷️", "🎃", "🐙", "👻", "🕷️", "🎃", "🐙"]
+    var emojisVehicles : Array<String> = ["🛞", "🚜", "🚁", "🚐", "🚀", "🛩️", "🛞", "🚜", "🚁", "🚐", "🚀", "🛩️"]
+    var emojisHalloween : Array<String> = ["👻", "🕷️", "🎃", "🐈‍⬛", "🕸️", "👻", "🕷️", "🎃", "🐈‍⬛", "🕸️"]
+    var emojisFaces : Array<String> = ["😇", "🫥", "🫡", "🥶", "😶‍🌫️", "😈", "👽", "😇", "🫥", "🫡", "🥶", "😶‍🌫️", "😈", "👽"]
     @State var cardCount : Int = 4
     
     var body: some View {
+        Text("Memorize!").font(.largeTitle)
         cards
         Spacer()
-        cardCountAdjusters
+        themeChoser
     }
     
     
     
     var cards : some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 85))]){
-            
-            ForEach(0..<cardCount, id: \.self){ index in
-                CardView(content : emojis[index])
+        ScrollView{
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 85))]){
                 
-            }
-        }.foregroundColor(.orange)
-            .padding()
+                ForEach(0..<emojisFaces.count, id: \.self){ index in
+                    CardView(content : emojisFaces[index])
+                    
+                }
+            }.foregroundColor(.orange)
+                .padding()
+        }
     }
     
     
-    var cardRemover : some View {
-        cardCountAdjuster(by: -1, argument: "minus.square.fill")
-    }
-    
-    
-    var cardAdder : some View {
-        cardCountAdjuster(by: +1, argument: "plus.square.fill")
-    }
-    
-    
-    var cardCountAdjusters : some View {
-        HStack{
-            cardCountAdjuster(by: -1, argument: "minus.square.fill")
+    var themeChoser : some View{
+        HStack(){
+            
             Spacer()
-            cardCountAdjuster(by: +1, argument: "plus.square.fill")
-        }.imageScale(.large).padding()
-    }
-    
-    
-    func cardCountAdjuster(by offset : Int, argument : String) -> some View {
-        Button(action: {
-            cardCount += offset
-        }, label: {
-            Image( systemName: argument)
-        }).disabled(cardCount + offset > emojis.count || cardCount + offset == 0)
-            .font(.largeTitle)
+            
+            Button( action : { }){
+                VStack{
+                    Image(systemName: "globe")
+                    Text("Tema 1")
+                }
+            }
+            
+            Spacer()
+            
+            Button( action : { }){
+                VStack{
+                    Image(systemName: "globe")
+                    Text("Tema 1")
+                }
+            }
+            
+            Spacer()
+            
+            Button( action : { }){
+                VStack{
+                    Image(systemName: "globe")
+                    Text("Tema 1")
+                }
+            }
+            
+            Spacer()
+        }.padding(.horizontal)
     }
 }
 
