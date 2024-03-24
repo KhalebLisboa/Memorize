@@ -8,16 +8,21 @@
 import SwiftUI
 
 struct ContentView: View {
-    var emojisVehicles : Array<String> = ["🛞", "🚜", "🚁", "🚐", "🚀", "🛩️", "🛞", "🚜", "🚁", "🚐", "🚀", "🛩️"]
-    var emojisHalloween : Array<String> = ["👻", "🕷️", "🎃", "🐈‍⬛", "🕸️", "👻", "🕷️", "🎃", "🐈‍⬛", "🕸️"]
-    var emojisFaces : Array<String> = ["😇", "🫥", "🫡", "🥶", "😶‍🌫️", "😈", "👽", "😇", "🫥", "🫡", "🥶", "😶‍🌫️", "😈", "👽"]
+    let emojisVehicles : Array<String> = ["🛞", "🚜", "🚁", "🚐", "🚀", "🛩️", "🛞", "🚜", "🚁", "🚐", "🚀", "🛩️"]
+    let emojisHalloween : Array<String> = ["👻", "🕷️", "🎃", "🐈‍⬛", "🕸️", "👻", "🕷️", "🎃", "🐈‍⬛", "🕸️"]
+    let emojisFaces : Array<String> = ["😇", "🫥", "🫡", "🥶", "😶‍🌫️", "😈", "👽", "😇", "🫥", "🫡", "🥶", "😶‍🌫️", "😈", "👽"]
+    
+    @State var emojis : Array<String> = []
     @State var cardCount : Int = 4
     
     var body: some View {
         Text("Memorize!").font(.largeTitle)
-        cards
-        Spacer()
-        themeChoser
+        if !emojis.isEmpty {
+            cards
+        } else {
+            emptyListMessage
+        }
+        themeSelectorMenu
     }
     
     
@@ -25,49 +30,49 @@ struct ContentView: View {
     var cards : some View {
         ScrollView{
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 85))]){
-                
-                ForEach(0..<emojisFaces.count, id: \.self){ index in
-                    CardView(content : emojisFaces[index])
-                    
+                ForEach(0..<emojis.count, id: \.self){ index in
+                    CardView(content : emojis[index])
                 }
-            }.foregroundColor(.orange)
-                .padding()
+            }
+            .foregroundColor(.orange)
+            .padding()
+        }
+    }
+    
+    var emptyListMessage : some View {
+        VStack{
+            Spacer()
+            VStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/, content: {
+                Image(systemName: "tray.fill").imageScale(.large).font(.title)
+                Text("Select a theme below")
+            })
+            Spacer()
         }
     }
     
     
-    var themeChoser : some View{
+    var themeSelectorMenu : some View{
         HStack(){
-            
             Spacer()
-            
-            Button( action : { }){
-                VStack{
-                    Image(systemName: "globe")
-                    Text("Tema 1")
-                }
-            }
-            
+            themeSelector(content: "Halloween", icon: "🎃", collection: emojisHalloween)
             Spacer()
-            
-            Button( action : { }){
-                VStack{
-                    Image(systemName: "globe")
-                    Text("Tema 1")
-                }
-            }
-            
+            themeSelector(content: "Vehicles", icon: "🛞", collection: emojisVehicles)
             Spacer()
-            
-            Button( action : { }){
-                VStack{
-                    Image(systemName: "globe")
-                    Text("Tema 1")
-                }
-            }
-            
+            themeSelector(content: "Faces", icon: "😇", collection: emojisFaces)
             Spacer()
         }.padding(.horizontal)
+    }
+    
+    
+    func themeSelector(content : String, icon : String, collection : Array<String>) -> some View{
+        Button( action : { 
+            emojis = collection.shuffled()
+        }){
+            VStack{
+                Text(icon).font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                Text(content)
+            }.foregroundColor(.black)
+        }
     }
 }
 
@@ -77,7 +82,7 @@ struct ContentView: View {
 
 
 struct CardView : View {
-    @State var isFaceUp : Bool = true
+    @State var isFaceUp : Bool = false
     let content : String
     
     var body: some View {
